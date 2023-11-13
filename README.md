@@ -9,7 +9,6 @@ you can run as following:
 python3 TTransE.py 
 
 python3 temporal.py
-
 ```
 
 #### Data preprocessing
