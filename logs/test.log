@@ -1,0 +1,8 @@
+2023-08-02 18:26:22 INFO     {'cuda': True, 'batch_size': 512, 'num_ent': 7128, 'num_rel': 230, 'ent_dim': 100, 'rel_dim': 100, 'time_dim': 20, 'state_dim': 100, 'action_dim': 200, 'mlp_input_dim': 300, 'mlp_hidden_dim': 100, 'path_length': 3, 'max_action_num': 50, 'lambda': 0.0, 'gamma': 0.95, 'ita': 0.01, 'zita': 0.9, 'beam_size': 100, 'entities_embeds_method': 'dynamic'}
+2023-08-02 18:26:22 INFO     Namespace(Gamma=0.95, IM=True, Ita=0.01, Lambda=0.0, Zita=0.9, alphas_pkl='dirchlet_alphas.pkl', batch_size=512, beam_size=100, clip_gradient=10.0, cuda=True, data_path='data/ICEWS14', do_test=True, do_train=False, ent_dim=100, entities_embeds_method='dynamic', hidden_dim=100, k=300, load_model_path='data/ICEWS14/logs/checkpoint_30.pth', lr=0.001, max_action_num=50, max_epochs=400, mu=0.1, num_workers=8, path_length=3, rel_dim=100, reward_shaping=False, save_epoch=30, save_path='logs', state_actions_path='state_actions_space.pkl', state_dim=100, test_batch_size=1, test_inductive=False, time_dim=20, time_span=24, valid_epoch=30)
+2023-08-02 18:26:31 INFO     Load pretrain model: data/ICEWS14/logs/checkpoint_30.pth
+2023-08-02 18:26:31 INFO     Start Testing......
+2023-08-02 18:28:42 INFO     Test MRR : 0.3977643133010015
+2023-08-02 18:28:42 INFO     Test HITS@1 : 0.29798113959357153
+2023-08-02 18:28:42 INFO     Test HITS@3 : 0.45072386771151546
+2023-08-02 18:28:42 INFO     Test HITS@10 : 0.586731305618276

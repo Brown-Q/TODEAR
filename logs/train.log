@@ -1,0 +1,7 @@
+2023-08-16 20:20:12 INFO     {'cuda': True, 'data_path': 'data/ICEWS14', 'time_span': 24, 'batch_size': 512, 'num_ent': 7128, 'num_rel': 230, 'ent_dim': 100, 'rel_dim': 100, 'time_dim': 20, 'state_dim': 100, 'action_dim': 200, 'mlp_input_dim': 300, 'mlp_hidden_dim': 100, 'path_length': 3, 'max_action_num': 50, 'lambda': 0.0, 'gamma': 0.95, 'ita': 0.01, 'zita': 0.9, 'beam_size': 100, 'entities_embeds_method': 'dynamic'}
+2023-08-16 20:20:12 INFO     Namespace(Gamma=0.95, IM=False, Ita=0.01, Lambda=0.0, Zita=0.9, alphas_pkl='dirchlet_alphas.pkl', batch_size=512, beam_size=100, clip_gradient=10.0, cuda=True, data_path='data/ICEWS14', do_test=False, do_train=True, ent_dim=100, entities_embeds_method='dynamic', hidden_dim=100, k=300, load_model_path='logs', lr=0.001, max_action_num=50, max_epochs=400, mu=0.1, num_workers=8, path_length=3, rel_dim=100, reward_shaping=True, save_epoch=30, save_path='logs', state_actions_path='state_actions_space.pkl', state_dim=100, test_batch_size=1, test_inductive=False, time_dim=20, time_span=24, valid_epoch=5)
+2023-08-16 20:20:20 INFO     Start Training......
+2023-08-16 20:20:32 INFO     Epoch 0/400 Loss: 0.0390627458691597, reward: 0.0961790457367897
+2023-08-16 20:20:44 INFO     Epoch 1/400 Loss: 0.029424991458654404, reward: 0.11607736349105835
+2023-08-16 20:20:57 INFO     Epoch 2/400 Loss: 0.032434482127428055, reward: 0.1262061595916748
+2023-08-16 20:21:09 INFO     Epoch 3/400 Loss: 0.02243897318840027, reward: 0.1399635672569275
