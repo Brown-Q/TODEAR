@@ -50,20 +50,20 @@ def dataloader(file,entity_file, relation_file, time_file,valid_file, test_file)
     with open(valid_file, 'r', encoding='utf-8') as test_f:
         lines = test_f.readlines()
         for line in lines:
-            quadruple = line.strip().split('\t')
-
-            s_ = quadruple[0]
-            if s_ not in entity_dict:
-                entity_dict[s_] = np.random.uniform(-6 / math.sqrt(80), 6 / math.sqrt(80),80)
-            r_ = quadruple[1]
-            if r_ not in relation_dict:
-                relation_dict[r_] = np.random.uniform(-6 / math.sqrt(100), 6 / math.sqrt(100), 100)
-            o_ = quadruple[2]
-            if o_ not in entity_dict:
-                entity_dict[o_] = np.random.uniform(-6 / math.sqrt(80), 6 / math.sqrt(80), 80)
-            t_ = quadruple[3]
-            if t_ not in time_dict:
-                time_dict[t_] = np.random.uniform(-6 / math.sqrt(20), 6 / math.sqrt(20), 20)
+            if len(quadruple) == 4:
+                quadruple = line.strip().split('\t')
+                s_ = quadruple[0]
+                if s_ not in entity_dict:
+                    entity_dict[s_] = np.random.uniform(-6 / math.sqrt(80), 6 / math.sqrt(80),80)
+                r_ = quadruple[1]
+                if r_ not in relation_dict:
+                    relation_dict[r_] = np.random.uniform(-6 / math.sqrt(100), 6 / math.sqrt(100), 100)
+                o_ = quadruple[2]
+                if o_ not in entity_dict:
+                    entity_dict[o_] = np.random.uniform(-6 / math.sqrt(80), 6 / math.sqrt(80), 80)
+                t_ = quadruple[3]
+                if t_ not in time_dict:
+                    time_dict[t_] = np.random.uniform(-6 / math.sqrt(20), 6 / math.sqrt(20), 20)
                 
     entity_dict=dict(sorted(entity_dict.items(),key = lambda x:int(x[0])))
     relation_dict=dict(sorted(relation_dict.items(),key = lambda x:int(x[0])))
