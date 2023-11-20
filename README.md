@@ -26,13 +26,11 @@ python3 mle_dirichlet.py --data_dir data/ICEWS14 --time_span 24
 ```
 
 #### Train
-you can run as following:
 ```
 python3 main.py --data_path data/ICEWS14 --cuda --do_train --reward_shaping --time_span 24
 ```
 
 #### Test
-you can run as following:
 ```
 python3 main.py --data_path data/ICEWS14 --cuda --do_test --IM --load_model_path xxxxx
 ```
