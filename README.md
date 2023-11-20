@@ -6,9 +6,9 @@
 #### Entity embedding
 you can run as following:
 ```
-python3 TTransE.py 
+python3 model/TTransE.py 
 
-python3 temporal.py
+python3 model/temporal.py
 ```
 
 #### Data preprocessing
