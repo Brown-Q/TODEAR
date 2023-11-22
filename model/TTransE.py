@@ -8,28 +8,23 @@ import torch
 
 
 def data_loader(file):
-    
     file_train = file + "train.txt"
     entity_set = set()   
     relation_set = set()
     time_set = set()
     quadruple_list = []
-
     with open(file_train, 'r', encoding='utf-8') as f:
         content = f.readlines()
         for line in content:
             quadruple = line.strip().split("\t")
             # if len(quadruple) != 4:
             #     continue
-
             # e.g. South Korea  Criticize or denounce   North Korea 2014-05-13
             s_ = int(quadruple[0])
             r_ = int(quadruple[1])
             o_ = int(quadruple[2])
             t_ = int(quadruple[3]) // 24
-
             quadruple_list.append([s_, r_, o_, t_])  
-
             entity_set.add(s_)
             relation_set.add(r_)
             entity_set.add(o_)
@@ -43,25 +38,19 @@ def data_loader(file):
             r_ = int(quadruple[1]) + rel_num
             o_ = int(quadruple[0])
             t_ = int(quadruple[3]) // 24
-
             quadruple_list.append([s_, r_, o_, t_]) 
-
             entity_set.add(s_)
             relation_set.add(r_)
             entity_set.add(o_)
             time_set.add(t_)    
-
-        
+    
     return list(entity_set), list(relation_set), list(time_set), quadruple_list
-
 
 def distanceL2(s, r, o, t):
     return torch.sum(torch.square(torch.cat((s,t),1) + r  - torch.cat((o,t),1))).cuda()
 
-
 def distanceL1(s, r, o, t):
     return torch.sum(torch.abs(torch.cat((s,t),1) + r  - torch.cat((o,t),1))).cuda()
-
 
 class TTransE:
     def __init__(self, entity_set, relation_set, time_set, quadruple_list,
@@ -88,7 +77,6 @@ class TTransE:
         quadruple_num = len(entity_set)
         for epoch in range(0,epochs):
             self.loss = 0
-
             for k in range(0, nbatches-1):
                 torch.cuda.empty_cache()
                 with torch.no_grad():
@@ -101,7 +89,6 @@ class TTransE:
                     self.update_embeddings(Tbatch)
             print("epoch: ", epoch)
             print("loss: ", self.loss)
-
         print("写入文件...")
         with open(file+"res/entity_50dim_batch400.txt", 'w', encoding='utf-8') as f1:
             self.entity = self.entity.tolist()
@@ -109,7 +96,6 @@ class TTransE:
                 f1.write(str(i) + "\t")
                 f1.write(str(j))
                 f1.write("\n")
-
         with open(file+"res/relation_50dim_batch400.txt", 'w', encoding='utf-8') as f2:
             self.relation = self.relation.tolist()
             for i, j in enumerate(self.relation):
@@ -134,7 +120,6 @@ class TTransE:
             if rand_head == head:
                 rand_head = entity_set[int(seed*quadruple_num)]
             corrupted_quadruple[0] = rand_head
-
         else:
             tail = quadruple[2]
             rand_tail = tail
@@ -151,30 +136,23 @@ class TTransE:
         # print(o_corrupt)
         relation = torch.nn.functional.normalize(self.relation[Tbatch[:,0][:,1]], p=2.0, dim=1)
         time = torch.nn.functional.normalize(self.time[Tbatch[:,0][:,3]], p=2.0, dim=1)
-
         if self.L1:
             dist_correct = distanceL1(s_correct, relation, o_correct, time)
             dist_corrupt = distanceL1(s_corrupt, relation, o_corrupt, time)
         else:
             dist_correct = distanceL2(s_correct, relation, o_correct, time)
             dist_corrupt = distanceL2(s_corrupt, relation, o_corrupt, time)
-
         err = self.hinge_loss(dist_correct, dist_corrupt)
-
         if err > 0:
             self.loss += err
             grad_pos = 2 * torch.nn.functional.normalize((torch.cat((s_correct,time),1) + relation  - torch.cat((o_correct,time),1)),p=2.0, dim=1)
             grad_neg = 2 * torch.nn.functional.normalize((torch.cat((s_corrupt,time),1) + relation  - torch.cat((o_corrupt,time),1)),p=2.0, dim=1)
- 
             self.entity[Tbatch[:,0][:,0]] -= self.learning_rate * grad_pos[:,:80]
             self.entity[Tbatch[:,0][:,2]] -= (-1) * self.learning_rate * grad_pos[:,:80]
-
             self.entity[Tbatch[:,1][:,0]] -= (-1) * self.learning_rate * grad_neg[:,:80]
             self.entity[Tbatch[:,1][:,2]] -= self.learning_rate * grad_neg[:,:80]
-
             self.relation[Tbatch[:,0][:,1]] -= self.learning_rate * grad_pos
             self.relation[Tbatch[:,0][:,1]] -= (-1) * self.learning_rate * grad_neg
-
             self.time[Tbatch[:,0][:,3]] -= self.learning_rate * grad_pos[:,80:]
             self.time[Tbatch[:,0][:,3]] -= (-1) * self.learning_rate * grad_neg[:,80:]
 
