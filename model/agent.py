@@ -79,8 +79,6 @@ class DynamicEmbedding(nn.Module):
                 self.embeddings = np.concatenate([self.embeddings,embedding],axis=0)
         self.embeddings = torch.from_numpy(self.embeddings).float().cuda() 
 
-
-
     def forward(self, entities, dt):
         # dt = dt.unsqueeze(-1)
         # batch_size = dt.size(0)
@@ -125,11 +123,9 @@ class Agent(nn.Module):
                 embeddings = np.concatenate([embeddings,embedding],axis=0) 
         self.rel_embs = torch.from_numpy(embeddings).float().cuda()
         # self.rel_embs = nn.Embedding(config['num_ent'], config['rel_dim'])
-
         self.policy_step = HistoryEncoder(config)
         self.policy_mlp = PolicyMLP(config)
         self.reward_ratio = RewardRatio(config)
-
         self.score_weighted_fc = nn.Linear(
             self.config['ent_dim'] * 2 + self.config['rel_dim'] * 2 + self.config['state_dim'],
             1, bias=True)
