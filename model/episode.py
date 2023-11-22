@@ -34,11 +34,9 @@ class Episode(nn.Module):
         current_entites = query_entities
         current_timestamps = query_timestamps
         prev_relations = torch.ones_like(query_relations) * self.num_rel  # NO_OP
-
         all_loss = []
         all_logits = []
         all_actions_idx = []
-
         self.agent.policy_step.set_hiddenx(query_relations.shape[0])
         for t in range(self.path_length):
             if t == 0:
@@ -53,7 +51,6 @@ class Episode(nn.Module):
                 self.max_action_num,
                 first_step
             )
-
             loss, logits, action_id = self.agent(
                 prev_relations,
                 current_entites,
@@ -63,7 +60,6 @@ class Episode(nn.Module):
                 query_timestamps,
                 action_space,
             )
-
             chosen_relation = torch.gather(action_space[:, :, 0], dim=1, index=action_id).reshape(action_space.shape[0])
             chosen_entity = torch.gather(action_space[:, :, 1], dim=1, index=action_id).reshape(action_space.shape[0])
             chosen_entity_timestamps = torch.gather(action_space[:, :, 2], dim=1, index=action_id).reshape(action_space.shape[0])
@@ -109,7 +105,6 @@ class Episode(nn.Module):
             query_timestamps,
             action_space
         )  # logits.shape: [batch_size, max_action_num]
-
         action_space_size = action_space.shape[1]
         if self.config['beam_size'] > action_space_size:
             beam_size = action_space_size
@@ -123,7 +118,6 @@ class Episode(nn.Module):
         prev_relations = torch.gather(action_space[:, :, 0], dim=1, index=top_k_action_id).reshape(-1)  # [batch_size * beam_size]
         self.agent.policy_step.hx = self.agent.policy_step.hx.repeat(1, 1, beam_size).reshape([batch_size * beam_size, -1])  # [batch_size * beam_size, state_dim]
         self.agent.policy_step.cx = self.agent.policy_step.cx.repeat(1, 1, beam_size).reshape([batch_size * beam_size, -1])  # [batch_size * beam_size, state_dim]
-
         beam_tmp = beam_log_prob.repeat([action_space_size, 1]).transpose(1, 0)  # [batch_size * beam_size, max_action_num]
         for t in range(1, self.path_length):
             query_timestamps_roll = query_timestamps.repeat(beam_size, 1).permute(1, 0).reshape(-1)
@@ -134,7 +128,6 @@ class Episode(nn.Module):
 
             action_space = self.env.next_actions(current_entites, current_timestamps,
                                                      query_timestamps_roll, self.max_action_num)
-
             loss, logits, action_id = self.agent(
                 prev_relations,
                 current_entites,
@@ -144,7 +137,6 @@ class Episode(nn.Module):
                 query_timestamps_roll,
                 action_space
             ) # logits.shape [bs * rollouts_num, max_action_num]
-
             hx_tmp = self.agent.policy_step.hx.reshape(batch_size, beam_size, -1)
             cx_tmp = self.agent.policy_step.cx.reshape(batch_size, beam_size, -1)
 
