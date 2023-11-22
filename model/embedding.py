@@ -16,7 +16,6 @@ import tqdm
 import apex
 
 def data_loader(file):
-    
     file_train = file + "train.txt"
     file_name_train = file + "entity2id.txt"
     entity_set = set()  
@@ -24,21 +23,18 @@ def data_loader(file):
     relation_set = set()
     time_set = set()
     quadruple_list = []
-
     with open(file_name_train, 'r', encoding='utf-8') as f:
         content = f.readlines()
         for line in content:
             quadruple = line.strip().split("\t")
             s_ = quadruple[0]
             name_set.add(s_)
-
     with open(file_train, 'r', encoding='utf-8') as f:
         content = f.readlines()
         for line in content:
             quadruple = line.strip().split("\t")
             # if len(quadruple) != 4:
             #     continue
-
             # e.g. South Korea  Criticize or denounce   North Korea 2014-05-13
             if quadruple[0].isdigit():
                 s_ = int(quadruple[0])
@@ -46,7 +42,6 @@ def data_loader(file):
                 o_ = int(quadruple[2])
                 t_ = int(quadruple[3])
             quadruple_list.append([s_, r_, o_, t_])  
-
             entity_set.add(s_)
             relation_set.add(int(r_))
             entity_set.add(o_)
@@ -71,7 +66,6 @@ def data_loader(file):
     time_set = list(time_set)
     time_set = sorted(time_set)
     return entity_set, relation_set, time_set, quadruple_list, name_set
-
 
 class GCN(torch.nn.Module):
     def __init__(self,feature, hidden, classes):
@@ -151,7 +145,6 @@ class TTransE:
             while (rand_head == head):
                 rand_head = random.sample(self.entity.keys(), 1)[0] 
             corrupted_quadruple[0] = rand_head
-
         else:
             tail = quadruple[2]
             rand_tail = tail
@@ -159,7 +152,6 @@ class TTransE:
                 rand_tail = random.sample(self.entity.keys(), 1)[0] 
             corrupted_quadruple[2] = rand_tail
         return corrupted_quadruple
-
 
     def hinge_loss(self, dist_correct, dist_corrupt):
         return max(0, torch.mean(F.relu(dist_correct - dist_corrupt + self.margin)))    
@@ -213,7 +205,6 @@ class TTransE:
                 f1.write(str(e) + "\t")
                 f1.write(str(list(entity_embedding1[int(e),:])))
                 f1.write("\n")
-
         with open(file+"res/relation_50dim_batch400.txt", 'w', encoding='utf-8') as f2:
             for r in self.relation:
                 f2.write(str(r) + "\t")
