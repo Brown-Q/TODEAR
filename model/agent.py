@@ -57,7 +57,7 @@ class DynamicEmbedding(nn.Module):
         super(DynamicEmbedding, self).__init__()
         # self.ent_embs = nn.Embedding(n_ent, dim_ent - dim_t)
         self.file = data_path
-        embeddings = np.empty(shape=[0, 80])       
+        embeddings = np.empty(shape=[0, 100])       
         with open(self.file+"/res/entity_emb.txt", 'r', encoding='utf-8') as e_f:
             lines = e_f.readlines()
             for line in lines:
@@ -69,7 +69,7 @@ class DynamicEmbedding(nn.Module):
         # print(torch.from_numpy(embeddings).float().cuda())
         self.w = torch.nn.Parameter((torch.from_numpy(1 / 10 ** np.linspace(0, 9, dim_t))).float())
         self.b = torch.nn.Parameter(torch.zeros(dim_t).float())
-        self.embeddings = np.empty(shape=[0, 20])       
+        self.embeddings = np.empty(shape=[0, 100])       
         self.time_span = time_span
         with open(self.file+"/res/time_emb.txt", 'r', encoding='utf-8') as e_f:
             lines = e_f.readlines()
@@ -88,7 +88,7 @@ class DynamicEmbedding(nn.Module):
         # t = t.squeeze(1)  # [batch_size, time_dim]
         t = self.embeddings[dt//self.time_span]
         e = self.ent_embs[entities]
-        return torch.cat((e, t), -1)
+        return torch.mul(e, t)
 
 class StaticEmbedding(nn.Module):
     def __init__(self, n_ent, dim_ent):
