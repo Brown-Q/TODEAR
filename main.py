@@ -50,7 +50,7 @@ def parse_args(args=None):
     parser.add_argument('--rel_dim', default=100, type=int, help='Embedding dimension of the relations')
     parser.add_argument('--state_dim', default=100, type=int, help='dimension of the LSTM hidden state')
     parser.add_argument('--hidden_dim', default=100, type=int, help='dimension of the MLP hidden layer')
-    parser.add_argument('--time_dim', default=20, type=int, help='Embedding dimension of the timestamps')
+    parser.add_argument('--time_dim', default=100, type=int, help='Embedding dimension of the timestamps')
     parser.add_argument('--entities_embeds_method', default='dynamic', type=str,
                         help='representation method of the entities, dynamic or static')
 
