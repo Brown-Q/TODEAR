@@ -6,7 +6,6 @@ import time
 import torch
 
 
-
 def data_loader(file):
     file_train = file + "train.txt"
     entity_set = set()   
