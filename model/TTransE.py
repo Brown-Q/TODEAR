@@ -167,6 +167,6 @@ if __name__ == '__main__':
     print("load file...")
     entity_set, relation_set, time_set, quadruple_list = data_loader(file)
     print("Complete load. entity : %d , relation : %d , time : %d , quadruple : %d" % (len(entity_set), len(relation_set), len(time_set), len(quadruple_list)))
-    TTransE = TTransE(entity_set, relation_set, time_set, quadruple_list, embedding_dim=80, learning_rate = 0.001, margin = 1, L1 = True)
+    TTransE = TTransE(entity_set, relation_set, time_set, quadruple_list, embedding_dim=100, learning_rate = 0.001, margin = 1, L1 = True)
     TTransE.emb_initialize()
     TTransE.train(file, epochs = 200)
